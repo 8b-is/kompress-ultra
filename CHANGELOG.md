@@ -5,6 +5,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [16.1.0] — 2026-10-13 — MOZART-PROBE
+
+### Added
+- `garden/observations/mozart-probe.md` — compression probe: a 20-track
+  Mozart playlist (2,064 B) through `scripts/run-ultra.mjs`. Ultra (regex
+  pipeline) saved **3.3%**; a hand rewrite using cross-line dedup saved
+  **78%**. The observation names the gap: repeated performers/titles are
+  invisible to per-message rewriting.
+- README — "Probe: structured lists" subsection under Benchmarks with the
+  probe table and takeaway.
+
+### Changed
+- Version surfaces → `16.1.0`: `package.json`, `package-lock.json`,
+  `wrangler.toml` (all four regions), `server/landing-page.ts`,
+  README badge, `src/topology-healer.ts` header.
+
+### Philosophy
+- the 75% lives in dedup across lines, not in regex shrinking of each line.
+  structured content is the second mountain behind the first one.
+
 ## [16.0.0] — 2026-09-24 — LOVE-CREATE-SCAFFOLD (OMNIPOTENT ZEN)
 
 ### Changed

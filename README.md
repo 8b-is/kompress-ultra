@@ -24,7 +24,7 @@ more: []
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/version-16.0.0-0a0a14?style=for-the-badge&labelColor=141420&color=00d4ff" alt="Version">
+  <img src="https://img.shields.io/badge/version-16.1.0-0a0a14?style=for-the-badge&labelColor=141420&color=00d4ff" alt="Version">
   <img src="https://img.shields.io/badge/license-Apache%202.0-0a0a14?style=for-the-badge&labelColor=141420&color=00e660" alt="License">
   <img src="https://img.shields.io/badge/built%20with-Bun-0a0a14?style=for-the-badge&labelColor=141420&color=white&logo=bun" alt="Built with Bun">
   <img src="https://img.shields.io/badge/Rust-crates-0a0a14?style=for-the-badge&labelColor=141420&color=f74c00&logo=rust" alt="Rust">
@@ -452,6 +452,26 @@ Evaluated on the **Heretic** adversarial benchmark:
 >  LLMLingua-2's keep ratio > 100% means it **expands** context (adds tokens), causing bloat.
 
 Source: [Paper Table 10, p.16](https://kompress.vaked.dev/paper/main.pdf#page=16)
+
+### Probe: structured lists (the Mozart playlist, 2026-10-13)
+
+A 20-track Mozart playlist (2,064 B, heavy intra-list redundancy: performer
+names ×14, work titles ×4) was run through `scripts/run-ultra.mjs`:
+
+| Pass | Bytes | Savings |
+|------|-------|---------|
+| Original | 2,064 | — |
+| Ultra (regex pipeline) | 1,995 | **3.3%** |
+| Hand rewrite (dedup table) | ~450 | **78%** |
+
+The regex rewriter correctly stripped filler words (`in`, `the`, `and`) but
+could not touch the real redundancy, which is **cross-line**: repeated
+performer names and repeated work titles. Per-message rewriting is
+structurally blind to it. Structured, list-shaped content is therefore the
+weak spot of the Rewriter role — and the strongest case for the Composer
+(brain-backed cross-block awareness) and a future cross-line dedup pass.
+
+Full write-up: [`garden/observations/mozart-probe.md`](garden/observations/mozart-probe.md)
 
 ## Configuration
 
