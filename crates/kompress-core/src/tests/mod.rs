@@ -183,3 +183,38 @@ fn rewriter_strips_filler() {
     // Verify score is preserved
     assert_eq!(rewritten_unit.score, 0.8);
 }
+
+#[test]
+fn medusa_pipe_frame_dedup_round_trip_and_idempotency() {
+    use crate::rewriter::{
+        dedup_pipe_frames, escape_wire_token, undedup_pipe_frames, verify_pipe_round_trip,
+    };
+
+    let frames = vec![
+        "# KU-v16.2.0 [BrainLine: Circulator→Pruner→Rewriter→Archivist→Composer | λ=1/π | keep=0.993 | ditto=″ | 8b-is/wigle-triad]".to_string(),
+        "W|MAC:MEDUSA|80:B5:4E:DB:3B:C4|8b-is-ADA-STAR|W3|6|-44|2.4GHz|+1|35.6895|139.6917".to_string(),
+        "W|MAC:MEDUSA|80:B5:4E:F2:02:B0|8b-is-VAK-PILLAR|W3|6|-48|2.4GHz|+1|35.6895|139.6917".to_string(),
+        "W|MAC:MEDUSA|80:B5:4E:F2:02:B4|8b-is-OMN-INF|W2|11|-52|2.4GHz|+1|35.6895|139.6917".to_string(),
+        "B|MAC:MEDUSA|DC:A6:32:91:7C:23|Chiro-Sanctuary-BLE|BLE-GATT|38|-57|BLE|+1|35.6895|139.6917".to_string(),
+        "A|MAC:MEDUSA|AC:DE:48:00:11:22|Studio-432Hz-RAOP|RAOP|149|-49|5GHz|+1|35.6895|139.6917".to_string(),
+    ];
+
+    let res = verify_pipe_round_trip(&frames);
+    assert!(res.ok, "Round-trip must be 100% lossless");
+    assert!(res.tokens_saved >= 15, "Expected >=15 tokens saved, got {}", res.tokens_saved);
+    assert_eq!(res.ditto_lines[0], frames[0]);
+    assert!(res.ditto_lines[2].contains("|″|"));
+    assert_eq!(res.restored_lines, frames);
+
+    // Strict idempotency
+    let twice = dedup_pipe_frames(&res.ditto_lines);
+    assert_eq!(twice, res.ditto_lines);
+    assert_eq!(undedup_pipe_frames(&twice), frames);
+
+    // Hostile SSID escaping
+    let escaped = escape_wire_token("Free|WiFi\\″Spoof\r\nLine2");
+    assert!(!escaped.contains('|'));
+    assert!(!escaped.contains('″'));
+    assert!(!escaped.contains('\n'));
+    assert!(!escaped.contains('\r'));
+}

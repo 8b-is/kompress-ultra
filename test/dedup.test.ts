@@ -175,6 +175,34 @@ describe("MEDUSA triad pipe-delimited telemetry dedup (wigle-triad & esp32.vaked
     expect(res.restoredLines).toEqual(frames);
   });
 
+  it("is strictly idempotent across repeated and incremental calls", () => {
+    const once = dedupPipeFrames(MEDUSA_FRAMES);
+    const twice = dedupPipeFrames(once);
+    expect(twice).toEqual(once);
+    expect(undedupPipeFrames(twice)).toEqual(MEDUSA_FRAMES);
+
+    // Appending an un-deduped frame to already-deduped frames still collapses shared columns
+    const incremental = dedupPipeFrames([
+      ...once.slice(0, 2),
+      MEDUSA_FRAMES[2],
+    ]);
+    expect(incremental).toEqual(once.slice(0, 3));
+  });
+
+  it("ignores # comment headers and blank lines without corrupting column anchors", () => {
+    const stream = [
+      "# KU-v16.2.0 [BrainLine: Circulator→Pruner→Rewriter→Archivist→Composer | λ=1/π | keep=0.993 | ditto=″ | 8b-is/wigle-triad]",
+      "",
+      ...MEDUSA_FRAMES,
+    ];
+    const res = verifyPipeRoundTrip(stream);
+    expect(res.ok).toBe(true);
+    expect(res.dittoLines[0]).toBe(stream[0]);
+    expect(res.dittoLines[2]).toBe(MEDUSA_FRAMES[0]);
+    expect(res.dittoLines[3]).toContain("|″|");
+    expect(res.restoredLines).toEqual(stream);
+  });
+
   it("handles empty and single-frame arrays cleanly", () => {
     expect(dedupPipeFrames([])).toEqual([]);
     expect(undedupPipeFrames([])).toEqual([]);

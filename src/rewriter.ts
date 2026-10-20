@@ -232,18 +232,31 @@ export function dedupPipeFrames(lines: string[]): string[] {
   if (!Array.isArray(lines) || lines.length <= 1) return lines ? lines.slice() : [];
   let prevTokens: string[] = [];
   const out: string[] = [];
-  for (const line of lines) {
-    const tokens = String(line).split("|");
-    if (prevTokens.length > 0 && tokens.length > 2) {
-      const deduped = tokens.map((tok, i) =>
+  for (const rawLine of lines) {
+    const line = String(rawLine);
+    const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith("#")) {
+      out.push(line);
+      continue;
+    }
+    const tokens = line.split("|");
+    if (tokens.length <= 2) {
+      out.push(line);
+      continue;
+    }
+    const resolved = tokens.map((tok, i) =>
+      tok === DITTO && i < prevTokens.length ? prevTokens[i] : tok
+    );
+    if (prevTokens.length > 0) {
+      const deduped = resolved.map((tok, i) =>
         i < prevTokens.length && tok === prevTokens[i] && tok.length > 1 ? DITTO : tok
       );
       const dittoCount = deduped.filter((t) => t === DITTO).length;
-      out.push(dittoCount >= 1 ? deduped.join("|") : line);
+      out.push(dittoCount >= 1 ? deduped.join("|") : resolved.join("|"));
     } else {
-      out.push(line);
+      out.push(resolved.join("|"));
     }
-    prevTokens = tokens;
+    prevTokens = resolved;
   }
   return out;
 }
@@ -256,8 +269,18 @@ export function undedupPipeFrames(lines: string[]): string[] {
   if (!Array.isArray(lines) || lines.length === 0) return [];
   let prevTokens: string[] = [];
   const out: string[] = [];
-  for (const line of lines) {
-    const tokens = String(line).split("|");
+  for (const rawLine of lines) {
+    const line = String(rawLine);
+    const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith("#")) {
+      out.push(line);
+      continue;
+    }
+    const tokens = line.split("|");
+    if (tokens.length <= 2) {
+      out.push(line);
+      continue;
+    }
     const restored = tokens.map((tok, i) =>
       tok === DITTO && i < prevTokens.length ? prevTokens[i] : tok
     );
@@ -278,10 +301,11 @@ export function verifyPipeRoundTrip(lines: string[]): {
 } {
   const dittoLines = dedupPipeFrames(lines);
   const restoredLines = undedupPipeFrames(dittoLines);
-  const tokensSaved = dittoLines.reduce(
-    (acc, line) => acc + line.split("|").filter((t) => t === DITTO).length,
-    0
-  );
+  const tokensSaved = dittoLines.reduce((acc, line) => {
+    const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith("#")) return acc;
+    return acc + line.split("|").filter((t) => t === DITTO).length;
+  }, 0);
   const ok =
     restoredLines.length === lines.length &&
     restoredLines.every((line, idx) => line === lines[idx]);

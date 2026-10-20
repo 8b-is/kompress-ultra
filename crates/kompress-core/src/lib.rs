@@ -18,4 +18,8 @@ pub use originist::{
     GENERATION_RISK_CAP, GENERATION_RISK_STEP,
 };
 pub use pipeline::{Pipeline, PipelineResult};
+pub use rewriter::{
+    dedup_pipe_frames, escape_wire_token, undedup_pipe_frames, verify_pipe_round_trip,
+    PipeRoundTripResult, DITTO,
+};
 pub use types::{BrainSnapshot, ContextUnit, Edge, Node};
