@@ -489,6 +489,15 @@ pipe-delimited `W|` (Wi-Fi), `B|` (BLE/BT), `A|` (AirPlay/RAOP), and `Q|`
 `host/wiglewww.py`) and **[`esp32.vaked.dev`](https://esp32.vaked.dev/)**
 ([`/api/kompress`](https://esp32.vaked.dev/api/kompress) · Tab 6 `🧠 AlexAI × Kompress-Ultra`, paired with [`8b-is/alexiai`](https://github.com/8b-is/alexiai) `GAIA-MLX-QUANT b1.58`).
 
+**`8b-is` Organization `ULTRA-SUPER-KOMPRESS` Google Drive Vault (`scripts/backup_8b_is_org_gdrive.py`):**
+Full 24-thread Apple Silicon archival engine backing up all **240** repositories in the `8b-is` GitHub organization into Google Drive (`My Drive/8b-is-ULTRA-SUPER-KOMPRESS-BACKUP/`):
+
+| Artifact / Stage | Raw Bytes | Compressed Bytes | Ratio / Savings | Verification |
+|---|---|---|---|---|
+| **240 `8b-is` Repositories (`231` Git Bundles + `9` Empty Metadata Capsules)** | `8,673,679,713 B` (`8.27 GiB`) | `3,950,429,486 B` (`3.68 GiB`) | **`2.196x`** (`54.46%` saved via `zstd --long=27 -T0`) | `240/240` (`0` errors) · `SHA256SUMS.txt` |
+| **`MANIFEST.kompress-ultra.ku16` (`KU16:` Column Ditto + Raw Deflate)** | `20,431 B` | `7,121 B` (`16,063 B` ditto) | **`2.869x`** (`65.15%` saved) | `lossless_roundtrip_ok = true` |
+| **`8b-is-org-complete-master.tar.zst` (Unified Master Archive)** | `8,673,679,713 B` | `3,944,451,094 B` (`3.67 GiB`) | **`2.199x`** (`54.52%` saved) | `SHA256: 455a4a3b2e48b36c2508213f99b9b43d0c54f69862e07df250e4a994a3f3508f` |
+
 Full write-up: [`garden/observations/mozart-probe.md`](garden/observations/mozart-probe.md)
 
 ## Configuration
