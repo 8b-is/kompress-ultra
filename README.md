@@ -24,7 +24,7 @@ more: []
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/version-16.1.0-0a0a14?style=for-the-badge&labelColor=141420&color=00d4ff" alt="Version">
+  <img src="https://img.shields.io/badge/version-16.2.0-0a0a14?style=for-the-badge&labelColor=141420&color=00d4ff" alt="Version">
   <img src="https://img.shields.io/badge/license-Apache%202.0-0a0a14?style=for-the-badge&labelColor=141420&color=00e660" alt="License">
   <img src="https://img.shields.io/badge/built%20with-Bun-0a0a14?style=for-the-badge&labelColor=141420&color=white&logo=bun" alt="Built with Bun">
   <img src="https://img.shields.io/badge/Rust-crates-0a0a14?style=for-the-badge&labelColor=141420&color=f74c00&logo=rust" alt="Rust">
@@ -461,7 +461,8 @@ names ×14, work titles ×4) was run through `scripts/run-ultra.mjs`:
 | Pass | Bytes | Savings |
 |------|-------|---------|
 | Original | 2,064 | — |
-| Ultra (regex pipeline) | 1,995 | **3.3%** |
+| Ultra (regex pipeline, pre-16.2) | 1,995 | **3.3%** |
+| **Ultra + cross-line dedup (16.2)** | **1,335** | **35.1%** |
 | Hand rewrite (dedup table) | ~450 | **78%** |
 
 The regex rewriter correctly stripped filler words (`in`, `the`, `and`) but
@@ -469,7 +470,24 @@ could not touch the real redundancy, which is **cross-line**: repeated
 performer names and repeated work titles. Per-message rewriting is
 structurally blind to it. Structured, list-shaped content is therefore the
 weak spot of the Rewriter role — and the strongest case for the Composer
-(brain-backed cross-block awareness) and a future cross-line dedup pass.
+(brain-backed cross-block awareness) and a cross-line dedup pass.
+
+**Landed in 16.2.0:** `dedupCrossLine()` (exported, and wired into the Ultra
+path) collapses a repeated title prefix to `″ ` and a repeated performer
+suffix to ` ″` across consecutive list-like lines — lifting the same input
+from 3.3% to **35.1%** savings. It only ever collapses (never deletes),
+refuses any cut that would land inside a `(...)` group, and skips lines
+carrying code/URL/error placeholders. Idempotent and unit-tested
+(`test/dedup.test.ts`).
+
+**Downstream Fleet Integration (`wigle-triad` × `esp32.vaked.dev`):** `v16.2.0`
+also exports `escapeWireToken()`, `dedupPipeFrames()`, `undedupPipeFrames()`,
+and `verifyPipeRoundTrip()` for column-wise ditto (`″`) deduplication across
+pipe-delimited `W|` (Wi-Fi), `B|` (BLE/BT), `A|` (AirPlay/RAOP), and `Q|`
+(Kuramoto ternary) frames in **[`8b-is/wigle-triad` (`v2.0.0`)](https://github.com/8b-is/wigle-triad)**
+(macOS `WigleMac.app`, Android `WigleTriad-v2.0.0-android-universal.apk`,
+`host/wiglewww.py`) and **[`esp32.vaked.dev`](https://esp32.vaked.dev/)**
+([`/api/kompress`](https://esp32.vaked.dev/api/kompress) · Tab 6 `🧠 AlexAI × Kompress-Ultra`, paired with [`8b-is/alexiai`](https://github.com/8b-is/alexiai) `GAIA-MLX-QUANT b1.58`).
 
 Full write-up: [`garden/observations/mozart-probe.md`](garden/observations/mozart-probe.md)
 

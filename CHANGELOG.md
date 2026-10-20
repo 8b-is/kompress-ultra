@@ -5,6 +5,40 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [16.2.0] — 2026-10-13 — CROSS-LINE-DEDUP
+
+### Added
+- `dedupCrossLine()` in `src/rewriter.ts` (exported from `src/index.ts`) —
+  collapses a repeated title prefix to `″ ` and a repeated performer suffix
+  to ` ″` across consecutive list-like lines. Only ever collapses (never
+  deletes); refuses any cut that would land inside a `(...)` group so
+  timestamps/catalogue numbers survive verbatim; skips lines carrying
+  code/URL/error placeholders (protection floors preserved). Idempotent.
+- `escapeWireToken()`, `dedupPipeFrames()`, `undedupPipeFrames()`, and
+  `verifyPipeRoundTrip()` in `src/rewriter.ts` (exported from `src/index.ts`) —
+  column-wise ditto (`″`) deduplication and lossless round-trip restoration for
+  pipe-delimited `W|`, `B|`, `A|`, `Q|` telemetry frames across
+  [`8b-is/wigle-triad` (`v2.0.0`)](https://github.com/8b-is/wigle-triad) and
+  [`esp32.vaked.dev`](https://esp32.vaked.dev/) (`/api/kompress`).
+- `test/dedup.test.ts` — 14 tests covering collapse behavior, safety,
+  idempotency, and MEDUSA triad pipe-frame round-trip (part of the 230 passing).
+
+### Changed
+- `compressMessage` Ultra path now runs `dedupCrossLine` after the per-line
+  regex pass, so the Ultra level is no longer structurally blind to cross-line
+  redundancy. Same Mozart input: **3.3% → 35.1%** savings (2,064 → 1,335 B).
+- README — "Probe: structured lists" updated with the post-16.2 measurement and
+  downstream `wigle-triad` × `esp32.vaked.dev` integration links.
+- Version surfaces → `16.2.0`: `package.json`, `package-lock.json`,
+  `wrangler.toml` (all four regions), `server/landing-page.ts`,
+  README badge, `src/topology-healer.ts` header.
+
+### Philosophy
+- the second mountain is climbable from the Rewriter role after all — you
+  don't need the Composer to see across lines, you need the lines to look at
+  each other. the Composer is still the bigger prize (arbitrary blocks, not
+  just list runs), but the 75% is no longer purely a brain problem.
+
 ## [16.1.0] — 2026-10-13 — MOZART-PROBE
 
 ### Added

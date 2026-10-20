@@ -1,6 +1,14 @@
 // ── Core pipeline ──────────────────────────────────────────────────
 export { isProtected, ebbinghausDecay, structuralBoost, scoreMessage, scoreMessageSync } from "./scoring.js";
-export { compressMessage, CompressionLevel } from "./rewriter.js";
+export {
+  compressMessage,
+  CompressionLevel,
+  dedupCrossLine,
+  escapeWireToken,
+  dedupPipeFrames,
+  undedupPipeFrames,
+  verifyPipeRoundTrip,
+} from "./rewriter.js";
 export { computeDensity, adaptiveThreshold, buildKompressDisplay } from "./compression.js";
 export { estimateTokens, escalateForBudget, getBudget, totalTokens, DEFAULT_BUDGETS, setTokenEstimator } from "./token-budget.js";
 export type { TokenEstimator } from "./token-budget.js";

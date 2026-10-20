@@ -1,5 +1,4 @@
-use crate::composer::Composer;
-use crate::loss::{asymmetric_loss, effective_score, is_critical_syntactic, LAMBDA, TARGET_RATIO};
+use crate::loss::{asymmetric_loss, LAMBDA, TARGET_RATIO};
 use crate::pipeline::Pipeline;
 use crate::pruner::Pruner;
 use crate::rewriter::Rewriter;
