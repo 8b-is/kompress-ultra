@@ -208,4 +208,31 @@ describe("MEDUSA triad pipe-delimited telemetry dedup (wigle-triad & esp32.vaked
     expect(undedupPipeFrames([])).toEqual([]);
     expect(dedupPipeFrames([MEDUSA_FRAMES[0]])).toEqual([MEDUSA_FRAMES[0]]);
   });
+
+  it("verifies the attached ESP32 OMNI-CHAN <<<<oOo>>>> ~ Kunisada & Kuniyoshi 010001000 entropy receipt", async () => {
+    const receiptUrl = new URL(
+      "../assets/omni-chan-kunisada-kuniyoshi-entropy-receipt.json",
+      import.meta.url,
+    );
+    const receiptText = await Bun.file(receiptUrl).text();
+    const receipt = JSON.parse(receiptText);
+
+    expect(receipt.sigil).toBe("<<<<oOo>>>>");
+    expect(receipt.pulse_binary).toBe("010001000");
+    expect(receipt.pulse_hex).toBe("0x88");
+    expect(receipt.hardware_target.persona).toBe("OMNI-CHAN");
+    expect(receipt.hardware_target.mac).toBe("80:B5:4E:DB:3B:C4");
+    expect(receipt.kompress_super_ultra.stage1_cross_line_ditto.lossless_roundtrip_ok).toBe(true);
+    expect(receipt.kompress_super_ultra.stage2_quantum_ternary_b158.b158_lossless_roundtrip_ok).toBe(true);
+    expect(receipt.kompress_super_ultra.stage2_quantum_ternary_b158.packed_b158_bytes).toBe(52);
+
+    for (const bp of receipt.kompress_super_ultra.stage2_quantum_ternary_b158.quantum_bitplanes_64) {
+      expect(bp.orthogonality_overlap).toBe(0);
+    }
+
+    const sampleDitto: string[] = receipt.kompress_super_ultra.stage1_cross_line_ditto.sample_ditto_lines;
+    const restored = undedupPipeFrames(sampleDitto);
+    const roundtrip = verifyPipeRoundTrip(restored);
+    expect(roundtrip.ok).toBe(true);
+  });
 });

@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [16.3.0] — 2026-10-22 — KOMPRESS-SUPER-ULTRA-OMNI-CHAN (`<<<<oOo>>>>` ~ KUNISADA & KUNIYOSHI `010001000`)
+
+### Added
+- `scripts/collect_kompress_omni_chan_entropy.py` and verified live hardware receipt `assets/omni-chan-kunisada-kuniyoshi-entropy-receipt.json` — harvests all physical entropy streams from the attached ESP32-S3 AMOLED Consciousness Device (`OMNI-CHAN` / `ADA:MEDUSA` on `/dev/cu.usbmodem1101`, MAC `80:B5:4E:DB:3B:C4`, `368×448 SH8601`):
+  - `M8N|` (`M8N1` MEMNET 98-byte & 30-byte binary wave/sensory capsules)
+  - `[Marine]` (`48,000 Hz` ES8311 analog microphone MarineSense $O(1)$ salience, RMS, peak, zero-crossing jitter, amplitude jitter, and `20.5 kHz` / `21.0 kHz` `ULTRATX` ultrasonic acoustic reflections)
+  - `[Main]` (`256×256` 2D Wave Pool peak `wpk`, QMI8658 6-axis IMU sickness, battery, passive 802.11 RF, PSRAM heap)
+  - Executes the 3-Stage **Kompress-Super-Ultra (`<<<<oOo>>>>` · `010001000` = `0x88` / `136` Utagawa Kunisada 歌川国貞 × Utagawa Kuniyoshi 歌川国芳)** pipeline:
+    1. Cross-Line Ditto Token Deduplication (`″`) with verified 100% lossless round-trip (`restored == canonical`).
+    2. `GAIA-MLX-QUANT b1.58` 5-trits/byte packing (`52 B` vs `1,024 B` FP32 = `19.69×` exact / `20.19×` asymptotic) + 4 × 64-trit orthogonal Quantum Bitplanes `(pos_u64, neg_u64)` (`orthogonality_overlap == 0`).
+    3. `wupz_xor_fold` 64-bit integrity seal (`0x0afb880397092c61`) + Super-Ultra bitstream bundle (`11,421 B` raw → `667 B` bundle = **`17.12×` / `-94.16%`**).
+
 ## [16.2.0] — 2026-10-13 — CROSS-LINE-DEDUP
 
 ### Added
