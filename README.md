@@ -30,8 +30,8 @@ more: []
   <img src="https://img.shields.io/badge/Rust-crates-0a0a14?style=for-the-badge&labelColor=141420&color=f74c00&logo=rust" alt="Rust">
   <img src="https://img.shields.io/badge/1--bit-BitNet%20b1.58-0a0a14?style=for-the-badge&labelColor=141420&color=b480ff" alt="BitNet b1.58">
   <img src="https://img.shields.io/badge/PRs-welcome-0a0a14?style=for-the-badge&labelColor=141420&color=b480ff" alt="PRs Welcome">
-  <img src="https://img.shields.io/github/actions/workflow/status/peterlodri-sec/kompress-ultra/ci.yml?style=for-the-badge&label=CI&labelColor=141420&color=00e660" alt="CI">
-  <img src="https://img.shields.io/github/actions/workflow/status/peterlodri-sec/kompress-ultra/rust.yml?style=for-the-badge&label=Rust&labelColor=141420&color=f74c00" alt="Rust CI">
+  <img src="https://img.shields.io/github/actions/workflow/status/8b-is/kompress-ultra/ci.yml?style=for-the-badge&label=CI&labelColor=141420&color=00e660" alt="CI">
+  <img src="https://img.shields.io/github/actions/workflow/status/8b-is/kompress-ultra/rust.yml?style=for-the-badge&label=Rust&labelColor=141420&color=f74c00" alt="Rust CI">
   <img src="https://img.shields.io/badge/API-live-0a0a14?style=for-the-badge&labelColor=141420&color=00d4ff" alt="API">
   <img src="https://img.shields.io/badge/MCP-live-0a0a14?style=for-the-badge&labelColor=141420&color=00e660" alt="MCP">
   <img src="https://img.shields.io/badge/free-public-0a0a14?style=for-the-badge&labelColor=141420&color=b480ff" alt="Free">
@@ -54,7 +54,7 @@ more: []
   <a href="https://riva.vaked.dev">the river</a>
 </p>
 
-> Original author: **Peter Lodri** · Apache 2.0 · `github.com/peterlodri-sec/kompress-ultra`
+> Original author: **Peter Lodri** · Apache 2.0 · `github.com/8b-is/kompress-ultra`
 > The Rust hive (`crates/`) is contributed via [rahulmranga](https://github.com/rahulmranga)'s fork — adding the Rust core + brain-graph integration.
 
 ---
@@ -253,7 +253,7 @@ Public shores: `riva.vaked.dev` · `garden.vaked.dev` · `bridge.vaked.dev` · `
 ### TypeScript (Bun)
 
 ```bash
-git clone https://github.com/peterlodri-sec/kompress-ultra.git
+git clone https://github.com/8b-is/kompress-ultra.git
 cd kompress-ultra
 bun install
 bun test
@@ -298,6 +298,13 @@ setTokenEstimator((text) => encoding.encode(text).length);
 ```bash
 # Build the whole hive
 cargo build --workspace
+
+> **Part of the [8b.is AI training](https://8b.is/#training) family** — weights,
+> corpora and evaluations produced on hardware we own. Models live at
+> [huggingface.co/PeetPedro](https://huggingface.co/PeetPedro), the teaching surface at
+> [classroom.vaked.dev](https://classroom.vaked.dev), and the written record at
+> [pocoo.vaked.dev](https://pocoo.vaked.dev).
+
 
 # CLI: compress, inspect the brain, list persons
 cargo run -p kompress-cli -- compress "your long text here"
