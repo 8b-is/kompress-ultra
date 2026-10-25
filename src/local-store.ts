@@ -201,12 +201,15 @@ export class LocalStore {
 
 const defaultStore = new LocalStore();
 let loaded = false;
+let loading: Promise<void> = Promise.resolve();
 
 async function ensureLoaded(): Promise<void> {
   if (!loaded) {
     loaded = true;
-    await defaultStore.load();
+    loading = defaultStore.load();
   }
+  // Every caller must wait until persisted entries are available.
+  await loading;
 }
 
 /** @deprecated Use `store.add()` on a class instance. */
